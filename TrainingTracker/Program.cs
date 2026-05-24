@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TrainingTracker.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +11,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configure DbContext for PostgreSQL - configure your connection string in appsettings.json or environment variables
+builder.Services.AddDbContext<TrainingTracker.Data.TrainingDbContext>(options =>
+{
+    var conn = builder.Configuration.GetConnectionString("DefaultConnection") ?? builder.Configuration["DefaultConnection"];
+    options.UseNpgsql(conn);
+});
 
 var app = builder.Build();
 
